@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Bolera Contrastes — pub, cafetería, 1x2, cervecería y comida temática."
+    />
+    <title>Bolera Contrastes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Urbanist:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="icon" href="./assets/logo.jpeg" />
+  </head>
+  <body class="menu-body">
+    <a class="skip-link" href="#carta">Saltar al menú</a>
+
+    <header class="menu-header">
+      <div class="container menu-header__inner">
+        <div class="menu-brand" aria-label="Bolera Contrastes">
+          <img class="menu-brand__logo" src="./assets/logo.jpeg" alt="Bolera Contrastes" />
+          <div class="menu-brand__text">
+            <div class="menu-brand__name">bolera <span>CONTRASTES</span></div>
+            <div class="menu-brand__tag">PUB · CAFETERÍA · 1X2 · CERVECERÍA · COMIDA TEMÁTICA</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="menu-tabs" aria-label="Secciones de la carta" data-tabs>
+      <div class="container menu-tabs__inner">
+        <!-- Render por JS -->
+      </div>
+    </nav>
+
+    <main id="carta" class="menu-main">
+      <div class="container">
+        <header class="menu-title">
+          <div class="menu-title__bar" aria-hidden="true"></div>
+          <h1 class="menu-title__text" data-section-title>Para Picar</h1>
+        </header>
+
+        <div class="menu-grid" data-menu-grid></div>
+      </div>
+    </main>
+
+    <footer class="allergens" aria-label="Leyenda de alérgenos">
+      <div class="container allergens__inner" data-allergens></div>
+    </footer>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
