@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta
-      name="description"
-      content="Bolera Contrastes — pub, cafetería, 1x2, cervecería y comida temática."
-    />
+    <meta name="description" content="Bolera Contrastes — pub, cafetería, 1x2 y cervecería." />
     <title>Bolera Contrastes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,45 +11,145 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Urbanist:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="icon" href="./assets/logo.jpeg" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="/assets/logo.jpeg" />
   </head>
-  <body class="menu-body">
-    <a class="skip-link" href="#carta">Saltar al menú</a>
+  <body class="home-body">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    <header class="menu-header">
-      <div class="container menu-header__inner">
-        <div class="menu-brand" aria-label="Bolera Contrastes">
-          <img class="menu-brand__logo" src="./assets/logo.jpeg" alt="Bolera Contrastes" />
-          <div class="menu-brand__text">
-            <div class="menu-brand__name">bolera <span>CONTRASTES</span></div>
-            <div class="menu-brand__tag">PUB · CAFETERÍA · 1X2 · CERVECERÍA · COMIDA TEMÁTICA</div>
-          </div>
-        </div>
+    <header class="home-header">
+      <div class="container home-header__inner">
+        <a class="home-brand" href="/" aria-label="Bolera Contrastes">
+          <img class="home-brand__logo" src="/assets/logo.jpeg" alt="Bolera Contrastes" />
+          <span class="home-brand__text">
+            <span class="home-brand__name">Bolera</span>
+            <span class="home-brand__name home-brand__name--accent">Contrastes</span>
+          </span>
+        </a>
+
+        <nav class="home-nav" aria-label="Principal">
+          <a href="/carta/">Carta</a>
+          <a href="#reservas">Reservas</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
       </div>
     </header>
 
-    <nav class="menu-tabs" aria-label="Secciones de la carta" data-tabs>
-      <div class="container menu-tabs__inner">
-        <!-- Render por JS -->
-      </div>
-    </nav>
+    <main id="contenido" class="home-main">
+      <section class="home-hero">
+        <div class="container home-hero__inner">
+          <div>
+            <p class="home-pill">Pub · Cafetería · 1x2 · Cervecería · Comida temática</p>
+            <h1 class="home-title">Bolera Contrastes</h1>
+            <p class="home-subtitle">
+              Entra a la carta, haz tu reserva o contáctanos en segundos.
+            </p>
+            <div class="home-cta">
+              <a class="btn" href="/carta/">Ver carta</a>
+              <a class="btn btn--ghost" href="#reservas">Reservar</a>
+            </div>
+          </div>
 
-    <main id="carta" class="menu-main">
-      <div class="container">
-        <header class="menu-title">
-          <div class="menu-title__bar" aria-hidden="true"></div>
-          <h1 class="menu-title__text" data-section-title>Para Picar</h1>
-        </header>
+          <div class="home-card">
+            <div class="home-card__title">Accesos rápidos</div>
+            <div class="home-card__grid">
+              <a class="quick" href="/carta/">
+                <span class="quick__kicker">Carta</span>
+                <span class="quick__value">Ver platos</span>
+              </a>
+              <a class="quick" href="#reservas">
+                <span class="quick__kicker">Reservas</span>
+                <span class="quick__value">Mesa / Evento</span>
+              </a>
+              <a class="quick" href="#contacto">
+                <span class="quick__kicker">Contacto</span>
+                <span class="quick__value">WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <div class="menu-grid" data-menu-grid></div>
-      </div>
+      <section id="reservas" class="home-section">
+        <div class="container">
+          <h2 class="home-h2">Reservas</h2>
+          <p class="home-p">Configura teléfono/WhatsApp y mensaje de reserva.</p>
+
+          <div class="reserve">
+            <div class="reserve__form">
+              <label class="field">
+                <span>Nombre</span>
+                <input type="text" name="nombre" placeholder="Tu nombre" autocomplete="name" />
+              </label>
+              <label class="field">
+                <span>Personas</span>
+                <input type="number" name="personas" placeholder="2" min="1" inputmode="numeric" />
+              </label>
+              <label class="field">
+                <span>Fecha</span>
+                <input type="date" name="fecha" />
+              </label>
+              <label class="field">
+                <span>Hora</span>
+                <input type="time" name="hora" />
+              </label>
+              <label class="field field--full">
+                <span>Notas</span>
+                <input type="text" name="notas" placeholder="Cumpleaños, bolera, etc." />
+              </label>
+              <div class="reserve__actions field--full">
+                <a class="btn" data-whatsapp-reserva href="#" aria-disabled="true">Reservar por WhatsApp</a>
+                <a class="btn btn--ghost" data-llamar href="#" aria-disabled="true">Llamar</a>
+              </div>
+              <p class="home-fine">
+                Pásame el número de WhatsApp/teléfono y lo dejo funcionando.
+              </p>
+            </div>
+
+            <div class="reserve__info">
+              <div class="info-box">
+                <div class="info-box__kicker">Horario</div>
+                <div class="info-box__value">Pendiente</div>
+                <div class="info-box__hint">Añadiremos “Abierto ahora” cuando tengamos el horario.</div>
+              </div>
+              <div class="info-box">
+                <div class="info-box__kicker">Ubicación</div>
+                <div class="info-box__value">Pendiente</div>
+                <div class="info-box__hint">Añadiremos Google Maps cuando tengamos la dirección.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contacto" class="home-section home-section--alt">
+        <div class="container">
+          <h2 class="home-h2">Contacto</h2>
+          <div class="contact-grid">
+            <a class="contact-card" data-whatsapp href="#" aria-disabled="true">
+              <div class="contact-card__kicker">WhatsApp</div>
+              <div class="contact-card__value">Configurar</div>
+            </a>
+            <a class="contact-card" data-instagram href="#" aria-disabled="true">
+              <div class="contact-card__kicker">Instagram</div>
+              <div class="contact-card__value">Configurar</div>
+            </a>
+            <a class="contact-card" data-maps href="#" aria-disabled="true">
+              <div class="contact-card__kicker">Cómo llegar</div>
+              <div class="contact-card__value">Configurar</div>
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <footer class="allergens" aria-label="Leyenda de alérgenos">
-      <div class="container allergens__inner" data-allergens></div>
+    <footer class="home-footer">
+      <div class="container home-footer__inner">
+        <span>© Bolera Contrastes</span>
+        <a href="/carta/">Carta</a>
+      </div>
     </footer>
 
-    <script src="./app.js" defer></script>
+    <script src="/home.js" defer></script>
   </body>
 </html>

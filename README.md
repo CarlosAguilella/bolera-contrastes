@@ -10,7 +10,9 @@ Desde esta carpeta:
 python3 -m http.server 8000
 ```
 
-Abre `http://localhost:8000`.
+Abre:
+- Inicio: `http://localhost:8000`
+- Carta: `http://localhost:8000/carta/`
 
 ## Publicar en Vercel
 

@@ -22,92 +22,92 @@ const MENU = [
         name: "Tablas de jamón y Queso",
         price: "14.00€",
         allergens: ["lacteos"],
-        imageSrc: "./assets/productos/tabla_jamon_queso.png",
+        imageSrc: "/assets/productos/tabla_jamon_queso.png",
       },
       {
         name: "Ensaladilla Rusa",
         price: "7.00€",
         allergens: ["huevo", "pescado"],
-        imageSrc: "./assets/productos/ensaladilla_rusa.png",
+        imageSrc: "/assets/productos/ensaladilla_rusa.png",
       },
       {
         name: "Gamba al Ajillo",
         price: "13.00€",
         allergens: ["crustaceos"],
-        imageSrc: "./assets/productos/gamba_ajillo.png",
+        imageSrc: "/assets/productos/gamba_ajillo.png",
       },
       {
         name: "Boquerones en vinagre",
         price: "7.00€",
         allergens: ["pescado"],
-        imageSrc: "./assets/productos/boquerones_en_vinagre.png",
+        imageSrc: "/assets/productos/boquerones_en_vinagre.png",
       },
       {
         name: "Calamares Rebozado",
         price: "12.00€",
         allergens: ["gluten", "moluscos", "huevo"],
-        imageSrc: "./assets/productos/calamares_rebozado.png",
+        imageSrc: "/assets/productos/calamares_rebozado.png",
       },
       {
         name: "Sepia",
         price: "14.00€",
         allergens: ["moluscos"],
-        imageSrc: "./assets/productos/sepia.png",
+        imageSrc: "/assets/productos/sepia.png",
       },
       {
         name: "Albóndigas de bacalao",
         price: "8.00€",
         allergens: ["gluten", "pescado", "huevo"],
-        imageSrc: "./assets/productos/albondigas_de_bacalao.png",
+        imageSrc: "/assets/productos/albondigas_de_bacalao.png",
       },
       {
         name: "Chipirón plancha",
         price: "12.00€",
         allergens: ["moluscos"],
-        imageSrc: "./assets/productos/chipiron_plancha.png",
+        imageSrc: "/assets/productos/chipiron_plancha.png",
       },
       {
         name: "Alitas de pollo",
         price: "7.00€",
         allergens: ["gluten"],
-        imageSrc: "./assets/productos/alitas_de_pollo.png",
+        imageSrc: "/assets/productos/alitas_de_pollo.png",
       },
       {
         name: "Nuggets de pollo",
         price: "7.00€",
         allergens: ["gluten", "frutos_secos"],
-        imageSrc: "./assets/productos/nuggets_de_pollo.png",
+        imageSrc: "/assets/productos/nuggets_de_pollo.png",
       },
       {
         name: "Mollejas",
         price: "7.00€",
         allergens: [],
-        imageSrc: "./assets/productos/mollejas.png",
+        imageSrc: "/assets/productos/mollejas.png",
       },
       {
         name: "Bravas",
         price: "7.00€",
         allergens: ["huevo", "sulfitos"],
-        imageSrc: "./assets/productos/bravas.png",
+        imageSrc: "/assets/productos/bravas.png",
       },
       {
         name: "Patatas fritas",
         price: "6.00€",
         allergens: [],
-        imageSrc: "./assets/productos/patatas_fritas.png",
+        imageSrc: "/assets/productos/patatas_fritas.png",
       },
       {
         name: "Bocaditos Queso de Cabra",
         desc: "Con Arándanos.",
         price: "7.00€",
         allergens: ["lacteos"],
-        imageSrc: "./assets/productos/bocaditos_queso_de_cabra.png",
+        imageSrc: "/assets/productos/bocaditos_queso_de_cabra.png",
       },
       {
         name: "Huevos rotos con jamón",
         price: "12.00€",
         allergens: ["huevo"],
-        imageSrc: "./assets/productos/huevos_rotos_con_jamon.png",
+        imageSrc: "/assets/productos/huevos_rotos_con_jamon.png",
       },
     ],
   },
@@ -123,14 +123,14 @@ const MENU = [
         desc: "Lechuga, tomate, atún, huevo y aceitunas.",
         price: "10.00€",
         allergens: ["huevo", "pescado"],
-        imageSrc: "./assets/productos/mixta.png",
+        imageSrc: "/assets/productos/mixta.png",
       },
       {
         name: "Contrastes",
         desc: "Variedades de lechugas, frutos secos, rulo de cabra y salsa contrastes.",
         price: "12.00€",
         allergens: ["lacteos", "frutos_secos", "sulfitos"],
-        imageSrc: "./assets/productos/contrastes.png",
+        imageSrc: "/assets/productos/contrastes.png",
       },
     ],
   },
@@ -324,7 +324,7 @@ function allergenSvg(id) {
 function autoImageForItem(name) {
   // Prioridad:
   // 1) `imageSrc` (si se define en el item)
-  // 2) Imagen local por slug: `./assets/productos/<slug>.jpg`
+  // 2) Imagen local por slug: `/assets/productos/<slug>.jpg`
   // 3) Fallback online (Unsplash) para prototipar
   const slug = name
     .toLowerCase()
@@ -333,7 +333,7 @@ function autoImageForItem(name) {
     .replace(/ñ/g, "n")
     .replace(/[^a-z0-9]+/g, "_")
     .replace(/^_+|_+$/g, "");
-  return `./assets/productos/${slug}.jpg`;
+  return `/assets/productos/${slug}.jpg`;
 }
 
 function renderAllergenRow(allergenIds) {

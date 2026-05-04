@@ -1,0 +1,64 @@
+const CONFIG = {
+  // Rellena estos datos cuando los tengáis.
+  phoneE164: "", // ejemplo: "+34600111222"
+  whatsappE164: "", // ejemplo: "+34600111222"
+  instagramUrl: "", // ejemplo: "https://instagram.com/boleracontrastes"
+  mapsUrl: "", // ejemplo: "https://maps.google.com/?q=..."
+};
+
+function setLink(selector, href) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  if (!href) return;
+  el.href = href;
+  el.removeAttribute("aria-disabled");
+}
+
+function getReserveMessage() {
+  const root = document.querySelector(".reserve__form");
+  if (!root) return "Hola, quería reservar una mesa.";
+
+  const nombre = root.querySelector('[name="nombre"]')?.value?.trim();
+  const personas = root.querySelector('[name="personas"]')?.value?.trim();
+  const fecha = root.querySelector('[name="fecha"]')?.value?.trim();
+  const hora = root.querySelector('[name="hora"]')?.value?.trim();
+  const notas = root.querySelector('[name="notas"]')?.value?.trim();
+
+  const parts = [
+    "Hola, quería reservar.",
+    nombre ? `Nombre: ${nombre}` : null,
+    personas ? `Personas: ${personas}` : null,
+    fecha ? `Fecha: ${fecha}` : null,
+    hora ? `Hora: ${hora}` : null,
+    notas ? `Notas: ${notas}` : null,
+  ].filter(Boolean);
+
+  return parts.join("\n");
+}
+
+function setup() {
+  if (CONFIG.whatsappE164) {
+    setLink("[data-whatsapp]", `https://wa.me/${CONFIG.whatsappE164.replace(/[^\d]/g, "")}`);
+  }
+  if (CONFIG.instagramUrl) setLink("[data-instagram]", CONFIG.instagramUrl);
+  if (CONFIG.mapsUrl) setLink("[data-maps]", CONFIG.mapsUrl);
+
+  if (CONFIG.phoneE164) {
+    setLink("[data-llamar]", `tel:${CONFIG.phoneE164}`);
+  }
+
+  const reserveBtn = document.querySelector("[data-whatsapp-reserva]");
+  if (reserveBtn && CONFIG.whatsappE164) {
+    const base = `https://wa.me/${CONFIG.whatsappE164.replace(/[^\d]/g, "")}`;
+    const refresh = () => {
+      const msg = getReserveMessage();
+      reserveBtn.href = `${base}?text=${encodeURIComponent(msg)}`;
+      reserveBtn.removeAttribute("aria-disabled");
+    };
+    refresh();
+    document.querySelector(".reserve__form")?.addEventListener("input", refresh);
+  }
+}
+
+setup();
+
