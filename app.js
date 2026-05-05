@@ -293,6 +293,14 @@ function byAllergenId(id) {
   return ALLERGENS.find((a) => a.id === id) ?? null;
 }
 
+function normalizeText(text) {
+  return String(text ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ñ/g, "n");
+}
+
 function allergenSvg(id) {
   // Iconos SVG (sin emojis). Diseñados para leerse bien a tamaños pequeños.
   const common =
@@ -357,6 +365,8 @@ function renderAllergenRow(allergenIds) {
 
 function renderMenuItem(item) {
   const card = el("article", { class: "product-card" });
+  card.dataset.name = item.name;
+  card.dataset.allergens = (item.allergens ?? []).join(",");
 
   const media = el("div", { class: "product-card__media" }, [
     el("div", { class: "product-card__media-bg", "aria-hidden": "true" }),
@@ -420,7 +430,7 @@ function renderSection(section) {
 }
 
 function renderTabs(activeId) {
-  const wrap = document.querySelector("[data-tabs] .menu-tabs__inner");
+  const wrap = document.querySelector("[data-tabs]");
   if (!wrap) return;
   wrap.innerHTML = "";
 
@@ -443,6 +453,7 @@ function setActiveSection(id) {
   if (!section) return;
   renderTabs(section.id);
   renderSection(section);
+  applySearchAndFilters();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -467,5 +478,76 @@ function renderAllergenLegend() {
   }
 }
 
+function setupTools() {
+  const search = document.querySelector("[data-search]");
+  const toggle = document.querySelector("[data-filter-toggle]");
+  const filtersPanel = document.querySelector("[data-filters]");
+  const filtersWrap = document.querySelector("[data-allergen-filters]");
+  const clearBtn = document.querySelector("[data-filter-clear]");
+  if (!search || !toggle || !filtersPanel || !filtersWrap || !clearBtn) return;
+
+  const state = {
+    query: "",
+    hideAllergens: new Set(),
+  };
+
+  const renderFilterButtons = () => {
+    filtersWrap.innerHTML = "";
+    for (const a of ALLERGENS) {
+      const btn = el("button", { type: "button", class: "filter-chip" });
+      btn.dataset.allergen = a.id;
+      btn.setAttribute("aria-pressed", state.hideAllergens.has(a.id) ? "true" : "false");
+      const icon = el("span", { class: "filter-chip__icon" });
+      icon.innerHTML = allergenSvg(a.id);
+      btn.append(icon, el("span", { text: a.label }));
+      btn.addEventListener("click", () => {
+        if (state.hideAllergens.has(a.id)) state.hideAllergens.delete(a.id);
+        else state.hideAllergens.add(a.id);
+        renderFilterButtons();
+        applySearchAndFilters(state);
+      });
+      filtersWrap.append(btn);
+    }
+  };
+
+  toggle.addEventListener("click", () => {
+    const isHidden = filtersPanel.hasAttribute("hidden");
+    if (isHidden) filtersPanel.removeAttribute("hidden");
+    else filtersPanel.setAttribute("hidden", "");
+  });
+
+  search.addEventListener("input", () => {
+    state.query = search.value;
+    applySearchAndFilters(state);
+  });
+
+  clearBtn.addEventListener("click", () => {
+    state.hideAllergens.clear();
+    renderFilterButtons();
+    applySearchAndFilters(state);
+  });
+
+  renderFilterButtons();
+  applySearchAndFilters(state);
+}
+
+function applySearchAndFilters(state) {
+  const search = document.querySelector("[data-search]");
+  const query = normalizeText(state?.query ?? search?.value ?? "");
+  const hideAllergens = state?.hideAllergens ?? new Set();
+
+  const cards = document.querySelectorAll(".product-card");
+  for (const card of cards) {
+    const name = normalizeText(card.dataset.name);
+    const allergens = (card.dataset.allergens ?? "").split(",").filter(Boolean);
+
+    const matchesQuery = !query || name.includes(query);
+    const blocked = allergens.some((a) => hideAllergens.has(a));
+
+    card.style.display = matchesQuery && !blocked ? "" : "none";
+  }
+}
+
 renderAllergenLegend();
+setupTools();
 setActiveSection(MENU[0]?.id);

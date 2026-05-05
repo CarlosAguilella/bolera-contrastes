@@ -16,6 +16,7 @@
     />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="icon" href="/assets/logo.jpeg" />
+    <meta name="theme-color" content="#111827" />
   </head>
   <body class="menu-body">
     <a class="skip-link" href="#carta">Saltar al menú</a>
@@ -34,14 +35,36 @@
       </div>
     </header>
 
-    <nav class="menu-tabs" aria-label="Secciones de la carta" data-tabs>
-      <div class="container menu-tabs__inner">
+    <nav class="menu-tabs" aria-label="Secciones de la carta">
+      <div class="container menu-tabs__inner" data-tabs>
         <!-- Render por JS -->
       </div>
     </nav>
 
     <main id="carta" class="menu-main">
       <div class="container">
+        <div class="menu-tools" aria-label="Herramientas de carta">
+          <label class="search" aria-label="Buscar en la carta">
+            <span class="search__icon" aria-hidden="true">⌕</span>
+            <input
+              class="search__input"
+              type="search"
+              placeholder="Buscar (ej: sepia, bocata, ensalada...)"
+              autocomplete="off"
+              data-search
+            />
+          </label>
+          <button class="tool-btn" type="button" data-filter-toggle>Filtrar alérgenos</button>
+        </div>
+
+        <section class="filters" data-filters hidden>
+          <div class="filters__title">Ocultar productos que contengan:</div>
+          <div class="filters__grid" data-allergen-filters></div>
+          <div class="filters__actions">
+            <button class="tool-btn tool-btn--ghost" type="button" data-filter-clear>Limpiar</button>
+          </div>
+        </section>
+
         <header class="menu-title">
           <div class="menu-title__bar" aria-hidden="true"></div>
           <h1 class="menu-title__text" data-section-title>Para Picar</h1>
@@ -58,4 +81,3 @@
     <script src="/app.js" defer></script>
   </body>
 </html>
-
