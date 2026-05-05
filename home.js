@@ -1,7 +1,7 @@
 const CONFIG = {
   // Rellena estos datos cuando los tengáis.
   phoneE164: "+34964771290",
-  // WhatsApp: pásame el número si es distinto del teléfono (o si tenéis WhatsApp).
+  // WhatsApp: en el futuro se puede activar añadiendo aquí el número.
   whatsappE164: "",
   facebookUrl:
     "https://www.facebook.com/pages/Cafetería-Bolera/482807545246007?hc_ref=ARRu2X54p8aDwlRwTI6s7B8jLxlFIIMAgbA1x4olzI203ynzBJ9aRJQOpoFfcHwk2NY&fref=tag",
@@ -40,9 +40,6 @@ function getReserveMessage() {
 }
 
 function setup() {
-  if (CONFIG.whatsappE164) {
-    setLink("[data-whatsapp]", `https://wa.me/${CONFIG.whatsappE164.replace(/[^\d]/g, "")}`);
-  }
   if (CONFIG.facebookUrl) setLink("[data-facebook]", CONFIG.facebookUrl);
   if (CONFIG.mapsUrl) setLink("[data-maps]", CONFIG.mapsUrl);
 
@@ -50,17 +47,7 @@ function setup() {
     setLink("[data-llamar]", `tel:${CONFIG.phoneE164}`);
   }
 
-  const reserveBtn = document.querySelector("[data-whatsapp-reserva]");
-  if (reserveBtn && CONFIG.whatsappE164) {
-    const base = `https://wa.me/${CONFIG.whatsappE164.replace(/[^\d]/g, "")}`;
-    const refresh = () => {
-      const msg = getReserveMessage();
-      reserveBtn.href = `${base}?text=${encodeURIComponent(msg)}`;
-      reserveBtn.removeAttribute("aria-disabled");
-    };
-    refresh();
-    document.querySelector(".reserve__form")?.addEventListener("input", refresh);
-  }
+  // WhatsApp reservas (futuro): si se define `whatsappE164`, se puede volver a activar aquí.
 }
 
 setup();
