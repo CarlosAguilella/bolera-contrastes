@@ -30,14 +30,25 @@ Para dominio propio: en Vercel → Project → Settings → Domains (ahí te dir
 
 ## Pagos (eventos)
 
-La web usa **Stripe Checkout** para cobrar plazas de eventos.
+La web soporta **Redsys** (recomendado si ya tenéis TPV Sabadell) y también **Stripe** como alternativa.
 
-1) Crea una cuenta de Stripe y configura tu **cuenta bancaria** en el panel de Stripe (los pagos llegan a Stripe y Stripe los abona a tu banco).
-2) En Vercel → Project → Settings → Environment Variables añade:
-   - `STRIPE_SECRET_KEY` = tu clave secreta de Stripe (empieza por `sk_...`)
-3) Redeploy.
+### Redsys (Sabadell)
 
-Nota: **no pegues tu IBAN** en el código ni en GitHub. La cuenta bancaria se configura dentro de Stripe.
+En Vercel → Project → Settings → Environment Variables añade:
+- `REDSYS_ENV` = `test` o `prod`
+- `REDSYS_MERCHANT_CODE` = FUC / Código de comercio
+- `REDSYS_TERMINAL` = terminal (ej: `1`)
+- `REDSYS_SECRET_KEY` = Clave SHA256 (no la subas a Git)
+
+Los pagos se inician desde `events.js` y se firman en backend en `api/payments/create.js`.
+Redsys notifica a `api/redsys/notify.js` (firma verificada).
+
+### Stripe (alternativa)
+
+En Vercel → Project → Settings → Environment Variables añade:
+- `STRIPE_SECRET_KEY` = tu clave secreta de Stripe (empieza por `sk_...`)
+
+Nota: **no pegues tu IBAN ni claves** en el código ni en GitHub. Se configuran en el panel del proveedor y en env vars de Vercel.
 
 ## Imágenes de productos
 

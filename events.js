@@ -142,7 +142,11 @@ function openReserveFlow(event) {
     payBtn.disabled = true;
     payBtn.textContent = "Abriendo pago…";
     try {
-      const resp = await fetch("/api/create-checkout-session", {
+      // Prioridad de pago:
+      // - Redsys (si está configurado en Vercel)
+      // - Stripe (si está configurado)
+      // El backend devolverá los campos necesarios para redirigir al pago.
+      const resp = await fetch("/api/payments/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -159,8 +163,30 @@ function openReserveFlow(event) {
         }),
       });
       const data = await resp.json();
-      if (!resp.ok || !data?.url) throw new Error(data?.error || "No checkout url");
-      window.location.href = data.url;
+      if (!resp.ok) throw new Error(data?.error || "Payment init failed");
+
+      if (data?.type === "redirect" && data?.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      if (data?.type === "redsys" && data?.redsysUrl && data?.fields) {
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = data.redsysUrl;
+        for (const [k, v] of Object.entries(data.fields)) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = k;
+          input.value = String(v);
+          form.appendChild(input);
+        }
+        document.body.appendChild(form);
+        form.submit();
+        return;
+      }
+
+      throw new Error("Unexpected payment response");
     } catch (err) {
       payBtn.disabled = false;
       payBtn.textContent = "Pagar y reservar";
