@@ -40,6 +40,7 @@ function getReserveMessage() {
 }
 
 function setup() {
+  if (CONFIG.phoneE164) document.documentElement.dataset.phoneE164 = CONFIG.phoneE164;
   if (CONFIG.facebookUrl) setLink("[data-facebook]", CONFIG.facebookUrl);
   if (CONFIG.mapsUrl) setLink("[data-maps]", CONFIG.mapsUrl);
 
