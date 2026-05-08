@@ -190,7 +190,11 @@ function openReserveFlow(event) {
     } catch (err) {
       payBtn.disabled = false;
       payBtn.textContent = "Pagar y reservar";
-      alert("No se pudo iniciar el pago. Inténtalo de nuevo.");
+      const msg =
+        err?.message && String(err.message) !== "[object Object]"
+          ? String(err.message)
+          : "No se pudo iniciar el pago.";
+      alert(`${msg} Inténtalo de nuevo.`);
       console.error(err);
     }
   });
