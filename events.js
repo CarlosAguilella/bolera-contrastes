@@ -29,6 +29,10 @@ function currencyEUR(amount) {
   return new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(amount);
 }
 
+function centsEUR(amount) {
+  return Math.round(Number(amount) * 100);
+}
+
 function getPhone() {
   return document.documentElement.dataset.phoneE164 || "";
 }
@@ -132,11 +136,44 @@ function openReserveFlow(event) {
     }
   });
 
+  const payBtn = el("button", { class: "btn", type: "button", text: "Pagar y reservar" });
+  payBtn.addEventListener("click", async () => {
+    const n = Math.max(1, Number(qty.value || 1));
+    payBtn.disabled = true;
+    payBtn.textContent = "Abriendo pago…";
+    try {
+      const resp = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: `${event.title} (${event.dateText})`,
+          pricePerSeatCents: centsEUR(event.pricePerSeat),
+          quantity: n,
+          currency: "eur",
+          metadata: {
+            event_id: event.id,
+            code,
+            customer_name: name.value?.trim() || "",
+            customer_phone: phoneInput.value?.trim() || "",
+          },
+        }),
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data?.url) throw new Error(data?.error || "No checkout url");
+      window.location.href = data.url;
+    } catch (err) {
+      payBtn.disabled = false;
+      payBtn.textContent = "Pagar y reservar";
+      alert("No se pudo iniciar el pago. Inténtalo de nuevo.");
+      console.error(err);
+    }
+  });
+
   const callBtn = el("a", {
-    class: "btn",
+    class: "btn btn--ghost",
     href: phone ? `tel:${phone}` : "#",
     "aria-disabled": phone ? "false" : "true",
-    text: phone ? "Llamar para confirmar" : "Añadir teléfono en CONFIG",
+    text: phone ? "O llamar para reservar" : "Añadir teléfono en CONFIG",
   });
 
   const content = el("div", { class: "modal__content" }, [
@@ -149,12 +186,8 @@ function openReserveFlow(event) {
     ]),
     total,
     codeBox,
-    el("div", { class: "modal__hint" }, [
-      el("span", {
-        text: "Llama y di el código para confirmar. Así evitamos reservas duplicadas.",
-      }),
-    ]),
-    el("div", { class: "modal__actions" }, [callBtn]),
+    el("div", { class: "modal__hint", text: "Puedes pagar online o, si lo prefieres, reservar por teléfono." }),
+    el("div", { class: "modal__actions" }, [payBtn, callBtn]),
     el("button", { class: "modal__close", type: "button", text: "Cerrar" }),
   ]);
 
@@ -170,4 +203,3 @@ function initEvents() {
 }
 
 initEvents();
-

@@ -1,0 +1,9 @@
+{
+  "name": "bolera-contrastes",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "stripe": "^16.1.0"
+  }
+}
+

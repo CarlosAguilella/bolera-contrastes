@@ -28,6 +28,17 @@ En el asistente elige:
 
 Para dominio propio: en Vercel → Project → Settings → Domains (ahí te dirá qué DNS poner en tu registrador).
 
+## Pagos (eventos)
+
+La web usa **Stripe Checkout** para cobrar plazas de eventos.
+
+1) Crea una cuenta de Stripe y configura tu **cuenta bancaria** en el panel de Stripe (los pagos llegan a Stripe y Stripe los abona a tu banco).
+2) En Vercel → Project → Settings → Environment Variables añade:
+   - `STRIPE_SECRET_KEY` = tu clave secreta de Stripe (empieza por `sk_...`)
+3) Redeploy.
+
+Nota: **no pegues tu IBAN** en el código ni en GitHub. La cuenta bancaria se configura dentro de Stripe.
+
 ## Imágenes de productos
 
 - Guardar fotos en `WEB BOLERA/assets/productos/` (carpeta ya creada).
