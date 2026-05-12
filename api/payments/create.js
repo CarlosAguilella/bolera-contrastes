@@ -57,9 +57,12 @@ function signRedsys({ secretKey, order, merchantParameters }) {
 }
 
 function nowOrderId() {
-  // 12 dígitos alfanuméricos, recomendado por Redsys.
-  const rnd = Math.random().toString(36).slice(2, 8).toUpperCase();
-  const ts = Date.now().toString().slice(-6);
+  // Redsys suele requerir pedido de 4-12 caracteres; en la práctica, lo más compatible es numérico.
+  // Generamos 12 dígitos (timestamp + random).
+  const ts = Date.now().toString().slice(-8); // 8 dígitos
+  const rnd = Math.floor(Math.random() * 10_000)
+    .toString()
+    .padStart(4, "0"); // 4 dígitos
   return `${ts}${rnd}`.slice(0, 12);
 }
 
@@ -161,4 +164,3 @@ export default async function handler(req, res) {
 
   return json(res, 500, { error: "No payment provider configured (Redsys/Stripe)" });
 }
-
