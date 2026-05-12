@@ -40,10 +40,11 @@ function decodeRedsysKey(secretKey) {
 
 function key3DES(secret, order) {
   // Deriva la clave 3DES con el número de pedido (Ds_Merchant_Order).
-  // Redsys: encripta el order con 3DES (ECB, sin padding especial más allá de PKCS#7).
+  // Redsys: encripta el order con 3DES (CBC, IV=0, PKCS#7).
   const key = decodeRedsysKey(secret);
   const orderPadded = Buffer.from(order, "utf8");
-  const cipher = crypto.createCipheriv("des-ede3", key, null);
+  const iv = Buffer.alloc(8, 0);
+  const cipher = crypto.createCipheriv("des-ede3-cbc", key, iv);
   cipher.setAutoPadding(true);
   const out = Buffer.concat([cipher.update(orderPadded), cipher.final()]);
   return out;

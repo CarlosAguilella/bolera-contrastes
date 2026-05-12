@@ -25,7 +25,8 @@ function encodeMerchantParams(obj) {
 function key3DES(secret, order) {
   const key = decodeRedsysKey(secret);
   const orderBuf = Buffer.from(order, "utf8");
-  const cipher = crypto.createCipheriv("des-ede3", key, null);
+  const iv = Buffer.alloc(8, 0);
+  const cipher = crypto.createCipheriv("des-ede3-cbc", key, iv);
   cipher.setAutoPadding(true);
   return Buffer.concat([cipher.update(orderBuf), cipher.final()]);
 }
@@ -90,4 +91,3 @@ export default async function handler(req, res) {
   // Respondemos 200 para confirmar recepción.
   return text(res, 200, "OK");
 }
-
