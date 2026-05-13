@@ -200,10 +200,10 @@ function openReserveFlow(event) {
   });
 
   const callBtn = el("a", {
-    class: "btn btn--ghost",
+    class: "tool-btn tool-btn--ghost",
     href: phone ? `tel:${phone}` : "#",
     "aria-disabled": phone ? "false" : "true",
-    text: phone ? "O llamar para reservar" : "Añadir teléfono en CONFIG",
+    text: phone ? "Reservar por teléfono" : "Añadir teléfono en CONFIG",
   });
 
   const content = el("div", { class: "modal__content" }, [
@@ -216,8 +216,12 @@ function openReserveFlow(event) {
     ]),
     total,
     codeBox,
-    el("div", { class: "modal__hint", text: "Puedes pagar online o, si lo prefieres, reservar por teléfono." }),
-    el("div", { class: "modal__actions" }, [payBtn, callBtn]),
+    el("div", { class: "modal__hint", text: "Paga online para confirmar tu plaza." }),
+    el("div", { class: "modal__actions" }, [payBtn]),
+    el("div", { class: "modal__alt" }, [
+      el("div", { class: "modal__altText", text: "¿Prefieres no pagar online?" }),
+      callBtn,
+    ]),
     el("button", { class: "modal__close", type: "button", text: "Cerrar" }),
   ]);
 

@@ -941,6 +941,20 @@ img {
   justify-content: flex-end;
   gap: 10px;
 }
+.modal__alt {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid rgba(14, 17, 22, 0.08);
+}
+.modal__altText {
+  color: rgba(14, 17, 22, 0.7);
+  font-weight: 800;
+}
 .modal__close {
   margin-top: 12px;
   width: 100%;
