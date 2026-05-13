@@ -7,7 +7,9 @@ function text(res, status, body) {
 }
 
 function base64urlToBase64(str) {
-  return str.replace(/-/g, "+").replace(/_/g, "/");
+  const b64 = str.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = b64.length % 4 === 0 ? "" : "=".repeat(4 - (b64.length % 4));
+  return b64 + pad;
 }
 
 function decodeRedsysKey(secretKey) {
@@ -35,7 +37,8 @@ function signRedsys({ secretKey, order, merchantParameters }) {
   const derived = key3DES(secretKey, order);
   const hmac = crypto.createHmac("sha256", derived);
   hmac.update(merchantParameters, "utf8");
-  return hmac.digest("base64");
+  const b64 = hmac.digest("base64");
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
 function readBody(req) {
@@ -71,7 +74,7 @@ export default async function handler(req, res) {
 
   let decoded;
   try {
-    decoded = Buffer.from(merchantParameters, "base64").toString("utf8");
+    decoded = Buffer.from(base64urlToBase64(merchantParameters), "base64").toString("utf8");
   } catch {
     return text(res, 400, "Invalid merchantParameters");
   }
@@ -81,9 +84,14 @@ export default async function handler(req, res) {
   const order = String(mp.Ds_Order || mp.Ds_Merchant_Order);
   const expected = signRedsys({ secretKey, order, merchantParameters });
 
-  // Redsys puede enviar la firma en base64 normal; comparamos en tiempo constante.
-  const a = Buffer.from(expected, "utf8");
-  const b = Buffer.from(signature, "utf8");
+  // Redsys puede enviar la firma en base64 o base64url. Normalizamos a base64url.
+  const normalizeSig = (s) =>
+    String(s || "")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/g, "");
+  const a = Buffer.from(normalizeSig(expected), "utf8");
+  const b = Buffer.from(normalizeSig(signature), "utf8");
   const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
   if (!ok) return text(res, 400, "Invalid signature");
 

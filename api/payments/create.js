@@ -26,7 +26,8 @@ function base64urlToBase64(str) {
 }
 
 function encodeMerchantParams(obj) {
-  return Buffer.from(JSON.stringify(obj), "utf8").toString("base64");
+  const b64 = Buffer.from(JSON.stringify(obj), "utf8").toString("base64");
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
 function decodeRedsysKey(secretKey) {
@@ -54,7 +55,8 @@ function signRedsys({ secretKey, order, merchantParameters }) {
   const derived = key3DES(secretKey, order);
   const hmac = crypto.createHmac("sha256", derived);
   hmac.update(merchantParameters, "utf8");
-  return hmac.digest("base64");
+  const b64 = hmac.digest("base64");
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
 function nowOrderId() {
