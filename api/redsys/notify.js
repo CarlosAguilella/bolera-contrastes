@@ -27,10 +27,12 @@ function encodeMerchantParams(obj) {
 function key3DES(secret, order) {
   const key = decodeRedsysKey(secret);
   const orderBuf = Buffer.from(order, "utf8");
+  const padLen = (8 - (orderBuf.length % 8)) % 8;
+  const orderPadded = padLen ? Buffer.concat([orderBuf, Buffer.alloc(padLen, 0)]) : orderBuf;
   const iv = Buffer.alloc(8, 0);
   const cipher = crypto.createCipheriv("des-ede3-cbc", key, iv);
-  cipher.setAutoPadding(true);
-  return Buffer.concat([cipher.update(orderBuf), cipher.final()]);
+  cipher.setAutoPadding(false);
+  return Buffer.concat([cipher.update(orderPadded), cipher.final()]);
 }
 
 function signRedsys({ secretKey, order, merchantParameters }) {
