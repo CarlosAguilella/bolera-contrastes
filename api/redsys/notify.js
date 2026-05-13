@@ -37,8 +37,7 @@ function signRedsys({ secretKey, order, merchantParameters }) {
   const derived = key3DES(secretKey, order);
   const hmac = crypto.createHmac("sha256", derived);
   hmac.update(merchantParameters, "utf8");
-  const b64 = hmac.digest("base64");
-  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  return hmac.digest("base64");
 }
 
 function readBody(req) {
@@ -74,7 +73,9 @@ export default async function handler(req, res) {
 
   let decoded;
   try {
-    decoded = Buffer.from(base64urlToBase64(merchantParameters), "base64").toString("utf8");
+    // Redsys suele enviar Base64 estándar; aceptamos base64url también por si acaso.
+    const mpB64 = /[-_]/.test(merchantParameters) ? base64urlToBase64(merchantParameters) : merchantParameters;
+    decoded = Buffer.from(mpB64, "base64").toString("utf8");
   } catch {
     return text(res, 400, "Invalid merchantParameters");
   }
@@ -84,12 +85,11 @@ export default async function handler(req, res) {
   const order = String(mp.Ds_Order || mp.Ds_Merchant_Order);
   const expected = signRedsys({ secretKey, order, merchantParameters });
 
-  // Redsys puede enviar la firma en base64 o base64url. Normalizamos a base64url.
-  const normalizeSig = (s) =>
-    String(s || "")
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/g, "");
+  // Redsys puede enviar la firma en base64 o base64url. Normalizamos a base64 estándar.
+  const normalizeSig = (s) => {
+    const str = String(s || "");
+    return /[-_]/.test(str) ? base64urlToBase64(str).replace(/=+$/g, "") : str.replace(/=+$/g, "");
+  };
   const a = Buffer.from(normalizeSig(expected), "utf8");
   const b = Buffer.from(normalizeSig(signature), "utf8");
   const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
