@@ -97,7 +97,34 @@ export default async function handler(req, res) {
   const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
   if (!ok) return text(res, 400, "Invalid signature");
 
-  // Aquí podríamos registrar el pago (KV/DB) y decrementar plazas.
+  // Registrar el pago si hay Vercel KV configurado (opcional).
+  const kvUrl = process.env.KV_REST_API_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN;
+  if (kvUrl && kvToken) {
+    const amount = String(mp.Ds_Amount || mp.Ds_Merchant_Amount || "");
+    const response = String(mp.Ds_Response || "");
+    const status = /^\d+$/.test(response) && Number(response) < 100 ? "OK" : `RESP_${response || "?"}`;
+    const record = {
+      date: new Date().toISOString(),
+      order,
+      amount: amount ? Number(amount) : null,
+      status,
+      rawResponse: response || null,
+    };
+    try {
+      await fetch(`${kvUrl}/lpush`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${kvToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ key: "bolera:payments", elements: [JSON.stringify(record)] }),
+      });
+    } catch {
+      // ignore
+    }
+  }
+
   // Respondemos 200 para confirmar recepción.
   return text(res, 200, "OK");
 }

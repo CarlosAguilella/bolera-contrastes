@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin · Bolera Contrastes</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="/assets/logo.jpeg" />
+    <meta name="robots" content="noindex,nofollow" />
+  </head>
+  <body class="home-body">
+    <main class="home-main">
+      <section class="home-section">
+        <div class="container">
+          <h1 class="home-h2">Panel privado</h1>
+          <p class="home-p">Acceso solo para administración.</p>
+
+          <div class="admin-card">
+            <div class="admin-login" data-login>
+              <label class="field field--full">
+                <span>Contraseña</span>
+                <input type="password" autocomplete="current-password" data-password />
+              </label>
+              <div class="reserve__actions field--full">
+                <button class="btn" type="button" data-login-btn>Entrar</button>
+                <button class="btn btn--ghost" type="button" data-logout-btn hidden>Salir</button>
+              </div>
+              <p class="home-fine" data-login-msg></p>
+            </div>
+
+            <div class="admin" data-admin hidden>
+              <div class="admin__top">
+                <div>
+                  <div class="mini-info__k">Estado</div>
+                  <div class="mini-info__v" data-status>Cargando…</div>
+                </div>
+                <div class="admin__actions">
+                  <button class="tool-btn" type="button" data-refresh>Actualizar</button>
+                </div>
+              </div>
+
+              <div class="admin__grid">
+                <section class="admin-box">
+                  <div class="admin-box__title">Pagos (eventos)</div>
+                  <div class="admin-box__hint">
+                    Se registran cuando Redsys llama a la notificación. Requiere KV en Vercel para persistir.
+                  </div>
+                  <div class="admin-table" role="table" aria-label="Pagos" data-payments></div>
+                </section>
+
+                <section class="admin-box">
+                  <div class="admin-box__title">Visitas</div>
+                  <div class="admin-box__hint">
+                    Las visitas se ven en Vercel Analytics. Si quieres, añadimos un contador propio.
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/admin.js" defer></script>
+  </body>
+</html>
+

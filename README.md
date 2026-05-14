@@ -43,6 +43,18 @@ En Vercel → Project → Settings → Environment Variables añade:
 Los pagos se inician desde `events.js` y se firman en backend en `api/payments/create.js`.
 Redsys notifica a `api/redsys/notify.js` (firma verificada).
 
+## Panel admin (privado)
+
+Panel en `/admin/` protegido con contraseña.
+
+En Vercel → Project → Settings → Environment Variables:
+- `ADMIN_PASSWORD` = tu contraseña (ej: `Admin-Bolera`)
+- `ADMIN_SECRET` = una cadena larga aleatoria (para firmar tokens)
+
+Opcional (para ver pagos en el panel): habilita Vercel KV y añade:
+- `KV_REST_API_URL`
+- `KV_REST_API_TOKEN`
+
 ### Stripe (alternativa)
 
 En Vercel → Project → Settings → Environment Variables añade:
